@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Configurações — ConectaDoa</title>
+    <link href="https://fonts.googleapis.com/css2?family=montserrat:wght@300;400;600,700&display=swap" rel="stylesheet">
+    <style>
+      *{box-sizing:border-box;margin:0;padding:0}
+      body{font-family:'montserrat',system-ui;background:#fff;color:#0e2b3b}
+      .navbar{position:fixed;top:0;left:0;right:0;height:72px;background:#164457;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:40}
+      main{max-width:900px;margin:100px auto;padding:24px}
+      .title{font-family:quicksand,sans-serif;font-size:28px;margin-bottom:12px}
+      form{display:flex;flex-direction:column;gap:12px;background:#f7fbfd;padding:16px;border-radius:10px}
+      input, select{padding:10px;border-radius:8px;border:1px solid #e6eef2}
+      .actions{display:flex;gap:8px}
+      .btn{padding:10px 14px;border-radius:10px;border:none;cursor:pointer}
+      .btn-primary{background:#3fd6ff;color:#06323f}
+
+      
+    /* sidebar estilo pinterest */
+    .sidebar{
+      width:78px;
+      background:#fff;
+      box-shadow:2px 0 8px rgba(0,0,0,0.06);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding-top:22px;
+      position:fixed;
+      top:72px;
+      left:0;
+      bottom:0;
+      z-index:20;
+    }
+    .sidebar a{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:6px;
+      text-decoration:none;
+      color:#0e2b3b;
+      margin-bottom:18px;
+      font-size:11px;
+      width:100%;
+      justify-content:center;
+      padding:8px 0;
+    }
+    .sidebar a:hover{opacity:0.8}
+    .sidebar img.icon{width:28px;height:28px;object-fit:contain;display:block}
+
+    </style>
+  </head>
+  <body>
+
+      <div class="app">
+    <!-- sidebar -->
+    <nav class="sidebar" aria-label="menu principal">
+      <a href="pagina-inicial.html" aria-current="page">
+        <img class="icon" src="https://img.icons8.com/ios-filled/50/000000/home.png" alt="home">
+        <span>Início</span>
+      </a>
+      <a href="explorar.html">
+        <img class="icon" src="https://img.icons8.com/ios-filled/50/000000/compass--v1.png" alt="explorar">
+        <span>Explorar</span>
+      </a>
+      <a href="atualizacoes.html">
+        <img class="icon" src="https://img.icons8.com/ios-filled/50/000000/activity-history.png" alt="atualizações">
+        <span>Atualizações</span>
+      </a>
+      <a href="mensagens.html">
+        <img class="icon" src="https://img.icons8.com/ios-filled/50/000000/new-message.png" alt="mensagens">
+        <span>Mensagens</span>
+      </a>
+      <a href="configuracoes.html">
+        <img class="icon" src="https://img.icons8.com/ios-filled/50/000000/settings.png" alt="configurações">
+        <span>Configurações</span>
+      </a>
+    </nav>
+
+    <nav class="navbar"><div style="display:flex;gap:12px;align-items:center"><img src="images/logo.png" style="width:38px"><strong>ConectaDoa</strong></div></nav>
+
+    <main>
+      <div class="title">Configurações do perfil</div>
+
+      <form id="formConfig">
+        <label>nome
+          <input id="nome" placeholder="Seu nome completo" />
+        </label>
+        <label>email
+          <input id="email" type="email" placeholder="seu@email.com" />
+        </label>
+        <label>senha (nova)
+          <input id="senha" type="password" placeholder="Deixe em branco para manter" />
+        </label>
+        <label>notificações
+          <select id="notificacoes">
+            <option value="todas">Todas</option>
+            <option value="apenas-principais">Apenas principais</option>
+            <option value="nenhuma">Nenhuma</option>
+          </select>
+        </label>
+
+        <div class="actions">
+          <button id="salvar" type="button" class="btn btn-primary">Salvar alterações</button>
+          <button id="limpar" type="button" class="btn" style="background:#eee">Limpar</button>
+        </div>
+
+        <div id="status" style="font-size:13px;color:#6b8b95;margin-top:8px"></div>
+      </form>
+    </main>
+
+    <footer style="text-align:center;padding:20px;color:#6b8b95">© ConectaDoa</footer>
+
+    <script>
+      let form = document.getElementById('formConfig')
+      let nome = document.getElementById('nome')
+      let email = document.getElementById('email')
+      let senha = document.getElementById('senha')
+      let notificacoes = document.getElementById('notificacoes')
+      let salvar = document.getElementById('salvar')
+      let limpar = document.getElementById('limpar')
+      let status = document.getElementById('status')
+
+      // carrega do localStorage se existir
+      let perfil = JSON.parse(localStorage.getItem('perfil')||'{}')
+      if(perfil.nome) nome.value = perfil.nome
+      if(perfil.email) email.value = perfil.email
+      if(perfil.notificacoes) notificacoes.value = perfil.notificacoes
+
+      salvar.addEventListener('click', function(){
+        if(!email.value.trim() || !nome.value.trim()){
+          status.textContent = 'nome e email são obrigatórios.'
+          return
+        }
+        let obj = {nome: nome.value.trim(), email: email.value.trim(), notificacoes: notificacoes.value}
+        // se senha informada, salva (simulação)
+        if(senha.value.trim()) obj.senha = senha.value.trim()
+        localStorage.setItem('perfil', JSON.stringify(obj))
+        status.textContent = 'Alterações salvas com sucesso.'
+        senha.value = ''
+      })
+
+      limpar.addEventListener('click', function(){
+        nome.value=''; email.value=''; senha.value=''; notificacoes.value='todas'; status.textContent=''
+      })
+    </script>
+  </body>
+</html>

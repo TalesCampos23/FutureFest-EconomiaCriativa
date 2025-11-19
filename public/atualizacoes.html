@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Atualizações — conectadoa</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:montserrat,arial;background:#f4f7f9;color:#0e2b3b}
+
+    /* navbar */
+    .navbar{
+      position:fixed;top:0;left:0;right:0;
+      height:72px;background:#164457;color:#fff;
+      display:flex;align-items:center;
+      justify-content:space-between;padding:0 24px;
+      z-index:40;box-shadow:0 4px 14px rgba(0,0,0,0.15)
+    }
+
+    /* container principal */
+    main{
+      max-width:1080px;margin:110px auto;padding:20px
+    }
+
+    .title{
+      font-size:30px;font-weight:700;margin-bottom:18px;
+      letter-spacing:-0.5px;color:#0e2b3b
+    }
+
+    /* abas */
+    .tabs{
+      display:flex;gap:10px;margin-bottom:20px
+    }
+    .tabs button{
+      padding:10px 16px;border-radius:8px;border:none;
+      background:#eaf7fb;color:#0e2b3b;font-weight:600;
+      cursor:pointer;transition:0.25s
+    }
+    .tabs button:hover{
+      background:#c7eef7
+    }
+    .tabs button.active{
+      background:#3fd6ff;color:#06323f;box-shadow:0 3px 8px rgba(0,0,0,0.15)
+    }
+
+    /* lista */
+    .updates{
+      display:grid;grid-template-columns:1fr;gap:18px
+    }
+
+    /* cards */
+    .u-card{
+      background:white;border-radius:14px;
+      padding:18px;border:1px solid #e1edf3;
+      box-shadow:0 6px 12px rgba(0,0,0,0.06);
+      position:relative;
+      overflow:hidden;
+      transition:0.3s;
+      animation:fade 0.35s ease;
+    }
+    .u-card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 8px 18px rgba(0,0,0,0.12)
+    }
+
+    @keyframes fade{
+      from{opacity:0;transform:translateY(10px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+
+    /* selo novo */
+    .badge{
+      position:absolute;top:12px;right:-20px;
+      background:#3fd6ff;color:#06323f;
+      padding:4px 18px;font-size:12px;font-weight:700;
+      transform:rotate(30deg)
+    }
+
+    .meta{font-size:14px;color:#6b8b95;margin-bottom:10px}
+
+    /* barra de progresso */
+    .progress-container{
+      margin-top:12px;background:#e5f4f8;
+      height:10px;border-radius:20px;overflow:hidden
+    }
+    .progress-bar{
+      height:10px;background:#3fd6ff;border-radius:20px;
+      width:0;transition:1.2s
+    }
+
+    /* sidebar */
+    .sidebar{
+      width:78px;background:white;
+      box-shadow:2px 0 8px rgba(0,0,0,0.06);
+      display:flex;flex-direction:column;align-items:center;
+      padding-top:22px;position:fixed;top:72px;left:0;bottom:0;
+    }
+    .sidebar a{
+      text-decoration:none;color:#0e2b3b;
+      margin-bottom:18px;font-size:11px;display:flex;
+      flex-direction:column;align-items:center;gap:6px;
+      padding:8px 0;width:100%
+    }
+    .sidebar a:hover{opacity:0.8}
+    .icon{width:28px;height:28px}
+  </style>
+</head>
+
+<body>
+
+  <!-- sidebar -->
+  <nav class="sidebar">
+    <a href="pagina-inicial.html"><img class="icon" src="https://img.icons8.com/ios-filled/50/000000/home.png"><span>Início</span></a>
+    <a href="explorar.html"><img class="icon" src="https://img.icons8.com/ios-filled/50/000000/compass--v1.png"><span>Explorar</span></a>
+    <a href="atualizacoes.html"><img class="icon" src="https://img.icons8.com/ios-filled/50/000000/activity-history.png"><span>Atualizações</span></a>
+    <a href="mensagens.html"><img class="icon" src="https://img.icons8.com/ios-filled/50/000000/new-message.png"><span>Mensagens</span></a>
+    <a href="configuracoes.html"><img class="icon" src="https://img.icons8.com/ios-filled/50/000000/settings.png"><span>Configurações</span></a>
+  </nav>
+
+  <!-- navbar -->
+  <nav class="navbar">
+    <div style="display:flex;gap:12px;align-items:center">
+      <img src="images/logo.png" style="width:38px"><strong>ConectaDoa</strong>
+    </div>
+  </nav>
+
+  <main>
+    <div class="title">Atualizações e Conquistas</div>
+
+    <div class="tabs">
+      <button id="tabTodos" class="active">Todos</button>
+      <button id="tabParcerias">Parcerias</button>
+      <button id="tabConquistas">Conquistas</button>
+    </div>
+
+    <div id="lista" class="updates"></div>
+  </main>
+
+  <footer style="text-align:center;padding:28px;color:#6b8b95;font-size:14px">© ConectaDoa</footer>
+
+<script>
+  let atualizacoes = [
+    {id:1,tipo:'parceria',titulo:'Parceria com mãos solidárias',texto:'Firmamos uma nova parceria para entregar mais de 3.000 cestas básicas em comunidades vulneráveis.',data:'2025-10-01',impacto:'+3.2k famílias alcançadas'},
+    {id:2,tipo:'conquista',titulo:'Meta 2025 alcançada',texto:'Atingimos 80% da meta anual de arrecadação de alimentos.',data:'2025-09-17',progresso:80},
+    {id:3,tipo:'parceria',titulo:'Projeto educacional aprovado',texto:'Serão 540 professores capacitados em comunidades escolares.',data:'2025-08-10',impacto:'540 educadores beneficiados'},
+    {id:4,tipo:'conquista',titulo:'Auditoria 100% aprovada',texto:'A auditoria independente confirmou total transparência no relatório anual.',data:'2025-07-22',progresso:100},
+    { id:5, tipo:'parceria', titulo:'Nova aliança com instituto viver bem', texto:'Unimos forças para oferecer atendimento psicológico gratuito para jovens.', data:'2025-10-12', impacto:'+480 atendimentos previstos' },
+    { id:6, tipo:'conquista', titulo:'Recorde de voluntários cadastrados', texto:'Batemos a marca de 2.300 voluntários ativos em 2025.', data:'2025-10-05', progresso:92 },
+    { id:7, tipo:'parceria', titulo:'Apoio internacional confirmado', texto:'Organização dos EUA financiará projetos de inclusão digital em periferias.', data:'2025-09-29', impacto:'R$ 180 mil em equipamentos' },
+    { id:8, tipo:'conquista', titulo:'Plataforma bate 50 mil acessos', texto:'O site teve crescimento de 230% nas últimas semanas.', data:'2025-09-25', progresso:100 },
+    { id:9, tipo:'parceria', titulo:'Expansão da rede de hortas comunitárias', texto:'Mais 12 hortas serão instaladas em 2025.', data:'2025-09-14', impacto:'+12 bairros atendidos' },
+    { id:10, tipo:'conquista', titulo:'Primeiro laboratório social inaugurado', texto:'Espaço com computadores, impressora 3d e oficinas digitais.', data:'2025-09-08', progresso:100 },
+    { id:11, tipo:'parceria', titulo:'Campanha nacional de arrecadação', texto:'Novas empresas apoiando doações via payroll.', data:'2025-08-30', impacto:'18 empresas confirmadas' },
+    { id:12, tipo:'conquista', titulo:'Transparência premiada', texto:'Ganhamos selo nacional de gestão e governança.', data:'2025-08-22', progresso:100 },
+    { id:13, tipo:'parceria', titulo:'Projeto saúde móvel', texto:'Unidade móvel atenderá moradores sem acesso a clínicas.', data:'2025-08-18', impacto:'+800 consultas mensais' },
+    { id:14, tipo:'conquista', titulo:'Plataforma atinge 1 milhão arrecadado', texto:'Batemos uma marca histórica desde o lançamento!', data:'2025-08-02', progresso:100 },
+    {id:15,tipo:'parceria',titulo:'Parceria Com Mãos Solidárias',texto:'Firmamos uma nova parceria para entregar mais de 3.000 cestas básicas em comunidades vulneráveis.',data:'2025-10-01',impacto:'+3.2k famílias alcançadas'},
+    {id:16,tipo:'conquista',titulo:'Meta 2025 Alcançada',texto:'Atingimos 80% da meta anual de arrecadação de alimentos.',data:'2025-09-17',progresso:80},
+    {id:17,tipo:'parceria',titulo:'Projeto Educacional Aprovado',texto:'Serão 540 professores capacitados em comunidades escolares.',data:'2025-08-10',impacto:'540 educadores beneficiados'},
+    {id:18,tipo:'conquista',titulo:'Auditoria 100% Aprovada',texto:'A auditoria independente confirmou total transparência no relatório anual.',data:'2025-07-22',progresso:100},
+    {id:19,tipo:'parceria',titulo:'Nova Rede De Voluntários',texto:'Criamos um grupo com mais de 200 novos voluntários ativos nas regiões Norte e Nordeste.',data:'2025-10-12',impacto:'200 novos voluntários ativos'},
+    {id:20,tipo:'conquista',titulo:'Aplicativo Atualizado',texto:'Lançamos uma nova versão do aplicativo com melhorias de acessibilidade e navegação.',data:'2025-10-08',progresso:65},
+    {id:21,tipo:'parceria',titulo:'Acordo Com Hortas Comunitárias',texto:'Firmamos parceria com 12 hortas urbanas para reforçar a distribuição de alimentos orgânicos.',data:'2025-09-30',impacto:'12 hortas comunitárias integradas'},
+    {id:22,tipo:'conquista',titulo:'500 Projetos Cadastrados',texto:'Atingimos um marco histórico de 500 ONGs e campanhas cadastradas na plataforma.',data:'2025-10-05',progresso:90},
+    {id:23,tipo:'parceria',titulo:'Programa ConectaTech',texto:'Iniciamos um projeto voltado a levar tecnologia e cursos básicos para jovens em vulnerabilidade.',data:'2025-09-15',impacto:'+1.300 jovens impactados'},
+    {id:24,tipo:'conquista',titulo:'Primeira Meta Mensal Batida',texto:'Superamos a arrecadação mensal prevista, atingindo 130% do esperado.',data:'2025-10-10',progresso:130},
+    {id:25,tipo:'parceria',titulo:'Apoio De Empresas Locais',texto:'Negócios locais aderiram ao movimento e instalaram pontos de coleta próprios.',data:'2025-10-03',impacto:'+47 pontos de coleta'},
+    {id:26,tipo:'conquista',titulo:'Sistema De Transparência Lançado',texto:'Agora todas as campanhas mostram histórico de doações em tempo real.',data:'2025-10-04',progresso:100},
+    {id:27,tipo:'parceria',titulo:'ConectaEdu Infantil',texto:'Programa criado para levar kits escolares a crianças entre 5 e 10 anos.',data:'2025-09-28',impacto:'3.800 crianças beneficiadas'},
+    {id:28,tipo:'conquista',titulo:'Primeiro Evento Presencial',texto:'Realizamos um evento com mais de 1.200 participantes e 26 ONGs parceiras.',data:'2025-09-25',progresso:100},
+    {id:29,tipo:'parceria',titulo:'Aliança Contra A Fome',texto:'Firmamos parceria com organizações internacionais focadas em segurança alimentar.',data:'2025-09-05',impacto:'Operação expandida para 5 países'},
+    {id:30,tipo:'conquista',titulo:'Reconhecimento Nacional',texto:'Conectadoa foi destaque em revista nacional como uma das maiores plataformas sociais do país.',data:'2025-08-29',progresso:100}
+  ]
+
+  let lista = document.getElementById('lista')
+
+  function isNovo(data){
+    let hoje = new Date()
+    let diff = (hoje - new Date(data)) / (1000*60*60*24)
+    return diff <= 10
+  }
+
+  function renderizar(filtro){
+    lista.innerHTML = ''
+    let items = atualizacoes.filter(function(a){ return !filtro || a.tipo===filtro })
+
+    items.forEach(function(u){
+      let div = document.createElement('div')
+      div.className = 'u-card'
+
+      let badge = isNovo(u.data) ? '<div class="badge">novo</div>' : ''
+
+      let extra = ''
+      if(u.impacto){
+        extra = '<p style="margin-top:10px;font-weight:600;color:#0e2b3b">'+u.impacto+'</p>'
+      }
+      if(u.progresso){
+        extra = `
+        <div style="margin-top:12px;font-size:14px;font-weight:600;color:#0e2b3b">progresso da meta: ${u.progresso}%</div>
+        <div class="progress-container">
+          <div class="progress-bar" style="width:${u.progresso}%;"></div>
+        </div>`
+      }
+
+      div.innerHTML = `
+        ${badge}
+        <h3 style="font-size:20px;margin-bottom:6px">${u.titulo}</h3>
+        <div class="meta">${u.data} • ${u.tipo}</div>
+        <p style="margin-top:6px;color:#456">${u.texto}</p>
+        ${extra}
+      `
+      lista.appendChild(div)
+    })
+
+    if(items.length===0){
+      lista.innerHTML = '<div style="opacity:0.6;padding:12px">nenhuma atualização.</div>'
+    }
+  }
+
+  /* abas */
+  function ativar(botao){
+    document.querySelectorAll('.tabs button').forEach(function(b){ b.classList.remove('active') })
+    botao.classList.add('active')
+  }
+
+  document.getElementById('tabTodos').addEventListener('click', function(){ ativar(this); renderizar() })
+  document.getElementById('tabParcerias').addEventListener('click', function(){ ativar(this); renderizar('parceria') })
+  document.getElementById('tabConquistas').addEventListener('click', function(){ ativar(this); renderizar('conquista') })
+
+  renderizar()
+</script>
+</body>
+</html>

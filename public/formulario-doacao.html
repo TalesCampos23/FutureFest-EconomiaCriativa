@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Formulário de Doação • ConectaDoa</title>
+
+  <!-- fontes (google) -->
+  <link href="https://fonts.googleapis.com/css2?family=montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- QRCode lib (gera QR no navegador) -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+
+  <!-- Chart.js (para demonstração de impacto com gráfico opcional) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <style>
+    :root{
+      --primary:#3fd6ff;
+      --dark:#06323f;
+      --card:#ffffff;
+      --muted:#6b8b95;
+      --success:#0fb56a;
+    }
+    *{box-sizing:border-box}
+    body{
+      font-family:montserrat,system-ui,Arial;
+      background:linear-gradient(180deg,#f2fbff,#f7fafc);
+      color:var(--dark);
+      padding:24px;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    .wrap{max-width:980px;margin:0 auto;display:grid;grid-template-columns:1fr 420px;gap:20px;align-items:start}
+    @media(max-width:980px){ .wrap{grid-template-columns:1fr} }
+
+    .card{
+      background:var(--card);
+      border-radius:14px;
+      padding:20px;
+      box-shadow:0 10px 30px rgba(6,50,63,0.06);
+      border:1px solid rgba(6,50,63,0.04);
+    }
+
+    h1{font-size:20px;margin-bottom:6px}
+    .lead{color:var(--muted);margin-bottom:16px}
+
+    label{display:block;font-size:13px;color:#123; margin-bottom:6px; margin-top:12px; font-weight:600}
+    input[type=text], input[type=email], input[type=tel], select, textarea{
+      width:100%;padding:12px;border-radius:10px;border:1px solid #e0e7eb;background:#fff;font-size:15px;
+    }
+    textarea{min-height:90px;resize:vertical}
+
+    .row{display:flex;gap:12px}
+    .col{flex:1}
+
+    /* métodos e botões */
+    .metodos{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .metodo{padding:10px 12px;border-radius:10px;border:1px solid #e6eef2;background:#fbffff;cursor:pointer;display:flex;gap:8px;align-items:center}
+    .metodo input{margin-right:8px}
+
+    .pix-area{display:none;padding:12px;border-radius:10px;background:#fff9f0;border:1px solid #f2dfc2;margin-top:10px}
+    .qr-wrap{display:flex;gap:12px;align-items:center}
+    #qrcode{width:150px;height:150px;background:white;padding:8px;border-radius:8px;background-image:url(https://codigosdebarrasbrasil.com.br/wp-content/uploads/2019/09/codigo_qr-300x300.png)}
+
+    /* cartão visual */
+    .card-visual{width:100%;border-radius:12px;padding:14px;background:linear-gradient(135deg,#06323f,#3fd6ff);color:white;box-shadow:0 12px 26px rgba(6,50,63,0.14);margin-top:12px}
+    .card-line{display:flex;justify-content:space-between;align-items:center}
+    .cc-brand{font-weight:800}
+
+    /* payment form */
+    .payment-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media(max-width:600px){ .payment-grid{grid-template-columns:1fr} }
+
+    .small-muted{font-size:13px;color:var(--muted);margin-top:6px}
+
+    .impact-card{margin-top:14px;padding:14px;border-radius:12px;background:linear-gradient(180deg,#e9fff2,#f7fff8);border:1px solid #d7f6df;color:#025e3b}
+    .progress-wrap{margin-top:16px}
+    .progress{height:12px;background:#eaf9ff;border-radius:999px;overflow:hidden}
+    .progress-bar{height:12px;background:linear-gradient(90deg,var(--primary),#34c4eb);width:0;transition:width .9s cubic-bezier(.22,.9,.32,1)}
+
+    .actions{display:flex;gap:10px;margin-top:18px;align-items:center}
+    .btn{padding:12px 14px;border-radius:12px;border:none;background:var(--primary);color:var(--dark);font-weight:800;cursor:pointer}
+    .btn.ghost{background:transparent;border:1px solid #e6eef2;color:var(--dark);font-weight:700}
+
+    .success-wrap{display:none;text-align:center;padding:18px;border-radius:12px;background:linear-gradient(180deg,#e6fff0,#f0fff7);border:1px solid #bef0d2;margin-top:12px}
+    .success-wrap h3{color:var(--success);margin-bottom:6px}
+    .receipt{font-size:14px;color:#064; margin-top:8px}
+
+    /* confetti canvas over screen */
+    #confettiCanvas{position:fixed;left:0;top:0;pointer-events:none;width:100%;height:100%;z-index:9999;display:none}
+
+    /* aviso legal */
+    .legal{margin-top:12px;font-size:13px;color:#647882;padding:12px;border-radius:10px;background:#fbfeff;border:1px solid #e6f7fb}
+
+    /* tiny helper for validation */
+    .error{border-color:#ffb3b3 !important;box-shadow:0 6px 18px rgba(255,77,77,0.06)}
+    .muted-block{font-size:13px;color:var(--muted);margin-top:6px}
+
+    /* QR + chart side */
+    .side-right{display:flex;flex-direction:column;gap:12px}
+    .chart-box{padding:12px;border-radius:12px;background:white;border:1px solid #eef7fb}
+    canvas{max-width:100%}
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+    <!-- main form -->
+    <div class="card" id="mainCard">
+      <h1>Formulário de Doação • ConectaDoa</h1>
+      <div class="lead">Agradecemos sua iniciativa — aqui você escolhe como contribuir (dinheiro, alimentos, roupas ou voluntário). Veja o impacto estimado ao lado.</div>
+
+      <!-- dados pessoais -->
+      <label for="nome">Nome completo</label>
+      <input id="nome" type="text" placeholder="Seu nome completo (ex.: Maria Silva)">
+
+      <label for="email">E-mail</label>
+      <input id="email" type="email" placeholder="exemplo@email.com">
+
+      <label for="telefone">Telefone (opcional)</label>
+      <input id="telefone" type="tel" placeholder="(00) 90000-0000">
+
+      <!-- tipo -->
+      <label>Como quer ajudar?</label>
+      <div class="metodos" role="radiogroup" aria-label="Tipo de doação">
+        <label class="metodo"><input type="radio" name="tipo" value="dinheiro" checked> Dinheiro (pix/cartão)</label>
+        <label class="metodo"><input type="radio" name="tipo" value="alimentos"> Alimentos</label>
+        <label class="metodo"><input type="radio" name="tipo" value="roupas"> Roupas / Itens</label>
+        <label class="metodo"><input type="radio" name="tipo" value="voluntario"> Voluntariado</label>
+      </div>
+
+      <!-- valor -->
+      <div id="blocoDinheiro">
+        <label for="valor">Valor (R$)</label>
+        <div class="row">
+          <select id="valor" aria-label="Valor da doação">
+            <option value="10">R$ 10,00</option>
+            <option value="20">R$ 20,00</option>
+            <option value="50">R$ 50,00</option>
+            <option value="100">R$ 100,00</option>
+            <option value="250">R$ 250,00</option>
+            <option value="outro">Outro</option>
+          </select>
+          <input id="valorOutro" type="number" placeholder="Outro valor" style="display:none">
+        </div>
+
+        <!-- métodos de pagamento -->
+        <label>Método de pagamento</label>
+        <div class="metodos">
+          <label class="metodo"><input type="radio" name="metodo" value="pix" checked> PIX</label>
+          <label class="metodo"><input type="radio" name="metodo" value="cartao"> Cartão</label>
+        </div>
+
+        <!-- PIX box -->
+        <div id="pixArea" class="pix-area">
+          <div style="display:flex;gap:12px;align-items:center">
+            <div id="qrcode"></div>
+            <div style="flex:1">
+              <div style="font-weight:700;color:#06323f">PIX: conectadoa@doacoes.com</div>
+              <div class="muted-block">Chave email • Instituto ConectaDoa</div>
+              <div class="small-muted" style="margin-top:10px">Escaneie o QR ou copie a chave. Após o pagamento clique em "Confirmar Doação".</div>
+            </div>
+          </div>
+          <div style="margin-top:8px;display:flex;gap:8px">
+            <button class="btn" id="copyPixBtn">Copiar chave PIX</button>
+            <button class="btn ghost" id="gerarPixBtn">Regenerar QR</button>
+          </div>
+        </div>
+
+        <!-- cartão area -->
+        <div id="cardArea" style="display:none;margin-top:12px">
+          <div class="card-visual" id="cardVisual">
+            <div class="card-line">
+              <div style="font-size:18px;font-weight:800">ConectaDoa</div>
+              <div class="cc-brand" id="brandVisual">VISA</div>
+            </div>
+            <div style="margin-top:16px;font-size:18px;letter-spacing:2px" id="visualNumber">•••• •••• •••• ••••</div>
+            <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center">
+              <div id="visualName" style="font-weight:700">SEU NOME</div>
+              <div id="visualExp">MM/AA</div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <label>Número do cartão</label>
+            <input id="ccNumber" type="text" placeholder="0000 0000 0000 0000" maxlength="19" inputmode="numeric">
+            <div class="row" style="margin-top:8px">
+              <div class="col">
+                <label>Vencimento</label>
+                <input id="ccExp" type="text" placeholder="MM/AA" maxlength="5">
+              </div>
+              <div class="col">
+                <label>CVV</label>
+                <input id="ccCvv" type="text" placeholder="123" maxlength="4" inputmode="numeric">
+              </div>
+            </div>
+            <label>Nome no cartão</label>
+            <input id="ccName" type="text" placeholder="Nome impresso no cartão">
+            <div class="small-muted">Pagamento por cartão é simulado — não enviaos dados a nenhum provedor.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- alimentos / roupas / voluntario -->
+      <div id="blocoNaoDinheiro" style="display:none">
+        <label>Detalhe a sua doação</label>
+        <textarea id="detalheNaoDinheiro" placeholder="Ex.: 5 cestas com alimentos não perecíveis, tamanho das roupas, localização para retirada..."></textarea>
+        <div class="small-muted">Equipe vai contatar você para agendar recolha/entrega.</div>
+      </div>
+
+      <label>Mensagem (opcional)</label>
+      <textarea id="mensagem" placeholder="Escreva uma mensagem de apoio (opcional)"></textarea>
+
+      <!-- impacto e progresso -->
+      <div class="impact-card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-weight:800">Impacto estimado</div>
+            <div class="small-muted">O que sua contribuição pode gerar</div>
+          </div>
+          <div style="text-align:right;font-weight:800;color:var(--dark)" id="impactValue">R$ 10</div>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress" aria-hidden="true">
+            <div id="progressBar" class="progress-bar" style="width:12%"></div>
+          </div>
+          <div class="small-muted" style="margin-top:8px">Meta mensal: R$ 20.000 • Arrecadado: R$ <span id="raised">2.400</span></div>
+        </div>
+
+        <div class="muted-block" style="margin-top:10px" id="impactText">
+          R$ 10 → 1 família recebe itens básicos.
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="confirmBtn">Confirmar Doação</button>
+        <button class="btn ghost" id="limparBtn">Limpar formulário</button>
+      </div>
+
+      <div class="legal">Ao confirmar você concorda em compartilhar seus dados para registro e envio de recibo. Dados usados apenas pela ConectaDoa.</div>
+
+      <div class="success-wrap" id="successWrap" aria-live="polite">
+        <h3 id="successTitle">Doação realizada com sucesso!</h3>
+        <div class="receipt" id="receiptArea"></div>
+        <div style="margin-top:8px"><button class="btn" id="toHome">Voltar para Início</button></div>
+      </div>
+    </div>
+
+    <!-- side panel: QR, gráfico de impacto e histórico -->
+    <aside class="side-right">
+      <div class="card chart-box card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><strong>QR PIX & Recibo</strong><div class="small-muted">Escaneie ou copie a chave</div></div>
+          <div style="font-size:12px;color:var(--muted)">Seguro</div>
+        </div>
+
+        <div style="margin-top:12px">
+          <div id="miniQrcode" style="width:120px;height:120px;margin:0 auto"></div>
+          <div style="text-align:center;margin-top:8px" class="muted-block">PIX chave: <strong>conectadoa@doacoes.com</strong></div>
+        </div>
+
+        <div style="margin-top:12px">
+          <button class="btn" id="downloadReceiptBtn" style="width:100%">Baixar recibo (PDF)</button>
+        </div>
+      </div>
+
+      <div class="card chart-box">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><strong>Resumo de impacto (demo)</strong><div class="small-muted">Últimos 3 meses</div></div>
+        </div>
+        <canvas id="impactChart" width="400" height="220" style="margin-top:12px"></canvas>
+        <div class="small-muted" style="margin-top:8px">Gráfico ilustrativo. Dados reais devem vir do backend.</div>
+      </div>
+
+      <div class="card chart-box">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><strong>Histórico local</strong><div class="small-muted">Doações registradas neste dispositivo</div></div>
+        </div>
+        <div id="historyList" style="margin-top:12px;font-size:14px;color:#064"></div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- confetti canvas -->
+  <canvas id="confettiCanvas"></canvas>
+
+  <script>
+    /***********************
+     * Helpers & inicial
+     ***********************/
+    const campanhasDummy = [] // placeholder if needed
+
+    const nomeEl = document.getElementById('nome')
+    const emailEl = document.getElementById('email')
+    const telEl = document.getElementById('telefone')
+    const tipoRadios = document.getElementsByName('tipo')
+    const metodoRadios = document.getElementsByName('metodo')
+    const valorSel = document.getElementById('valor')
+    const valorOutro = document.getElementById('valorOutro')
+    const pixArea = document.getElementById('pixArea')
+    const cardArea = document.getElementById('cardArea')
+    const blocoDinheiro = document.getElementById('blocoDinheiro')
+    const blocoNaoDinheiro = document.getElementById('blocoNaoDinheiro')
+    const detalheNaoDinheiro = document.getElementById('detalheNaoDinheiro')
+    const mensagemEl = document.getElementById('mensagem')
+    const impactValueEl = document.getElementById('impactValue')
+    const impactTextEl = document.getElementById('impactText')
+    const progressBar = document.getElementById('progressBar')
+    const raisedSpan = document.getElementById('raised')
+    const confirmBtn = document.getElementById('confirmBtn')
+    const limparBtn = document.getElementById('limparBtn')
+    const pixKey = 'conectadoa@doacoes.com'
+    const qrcodeEl = document.getElementById('qrcode')
+    const miniQ = document.getElementById('miniQrcode')
+    const copyPixBtn = document.getElementById('copyPixBtn')
+    const gerarPixBtn = document.getElementById('gerarPixBtn')
+    const ccNumber = document.getElementById('ccNumber')
+    const ccExp = document.getElementById('ccExp')
+    const ccCvv = document.getElementById('ccCvv')
+    const ccName = document.getElementById('ccName')
+    const visualNumber = document.getElementById('visualNumber')
+    const visualName = document.getElementById('visualName')
+    const visualExp = document.getElementById('visualExp')
+    const brandVisual = document.getElementById('brandVisual')
+    const cardVisual = document.getElementById('cardVisual')
+    const successWrap = document.getElementById('successWrap')
+    const receiptArea = document.getElementById('receiptArea')
+    const toHome = document.getElementById('toHome')
+    const historyList = document.getElementById('historyList')
+    const downloadReceiptBtn = document.getElementById('downloadReceiptBtn')
+
+    // initial state
+    function init(){
+      // show pix by default
+      pixArea.style.display = 'block'
+      cardArea.style.display = 'none'
+      blocoNaoDinheiro.style.display = 'none'
+      gerarQRCode(fullPixPayload())
+      gerarMiniQRCode(fullPixPayloadMini())
+      loadRaised()
+      renderHistory()
+      initChart()
+    }
+    init()
+
+    /***********************
+     * PIX / QR generation
+     ***********************/
+    function fullPixPayload(){
+      // Very simple payload: we put a text: in real apps use BR Code format (EMV) generator
+      // Here we produce a human-friendly string with amount placeholder
+      const amt = (valorSel.value === 'outro' && valorOutro.value) ? Number(valorOutro.value) : Number(valorSel.value)
+      const payload = `pix://chave=${pixKey};nome=Instituto ConectaDoa;valor=${amt || ''};descricao=Doacao ConectaDoa`
+      return payload
+    }
+    function fullPixPayloadMini(){
+      return `PIX:${pixKey}`
+    }
+
+    function gerarQRCode(text){
+      // large QR
+      qrcodeEl.innerHTML = ''
+      QRCode.toCanvas(qrcodeEl, text, {width:150, margin:1, color: {dark:'#06323f', light:'#ffffff'}}, function (err) {
+        if(err) console.error(err)
+      })
+    }
+    function gerarMiniQRCode(text){
+      miniQ.innerHTML = ''
+      QRCode.toCanvas(miniQ, text, {width:120, margin:1, color: {dark:'#06323f', light:'#ffffff'}}, function (err) {
+        if(err) console.error(err)
+      })
+    }
+
+    copyPixBtn.addEventListener('click', ()=> {
+      navigator.clipboard.writeText(pixKey).then(()=> {
+        copyPixBtn.textContent = 'Chave copiada'
+        setTimeout(()=> copyPixBtn.textContent = 'Copiar chave PIX', 1600)
+      })
+    })
+
+    gerarPixBtn.addEventListener('click', ()=>{
+      gerarQRCode(fullPixPayload() + ';r=' + Date.now())
+      gerarMiniQRCode(fullPixPayloadMini() + ';r=' + Date.now())
+    })
+
+    /***********************
+     * tipo / metodo toggles
+     ***********************/
+    Array.from(tipoRadios).forEach(r => r.addEventListener('change', ()=>{
+      const tipo = getTipo()
+      if(tipo === 'dinheiro'){
+        blocoDinheiro.style.display = 'block'
+        blocoNaoDinheiro.style.display = 'none'
+      } else {
+        blocoDinheiro.style.display = 'none'
+        blocoNaoDinheiro.style.display = 'block'
+      }
+    }))
+    Array.from(metodoRadios).forEach(r=> r.addEventListener('change', ()=>{
+      const metodo = getMetodo()
+      if(metodo === 'pix'){
+        pixArea.style.display = 'block'
+        cardArea.style.display = 'none'
+      } else {
+        pixArea.style.display = 'none'
+        cardArea.style.display = 'block'
+      }
+    }))
+
+    function getTipo(){ return Array.from(tipoRadios).find(r=> r.checked).value }
+    function getMetodo(){ return Array.from(metodoRadios).find(r=> r.checked).value }
+
+    /***********************
+     * valor change & impacto
+     ***********************/
+    valorSel.addEventListener('change', ()=>{
+      if(valorSel.value === 'outro') valorOutro.style.display = 'block'
+      else valorOutro.style.display = 'none'
+      updateImpact()
+    })
+    valorOutro.addEventListener('input', updateImpact)
+
+    function updateImpact(){
+      let valor = (valorSel.value === 'outro') ? Number(valorOutro.value || 0) : Number(valorSel.value)
+      if(!valor || isNaN(valor)) valor = 10
+      impactValueEl.textContent = 'R$ ' + valor
+      // impact text
+      let txt = ''
+      if(valor < 20) txt = 'Pequena contribuição: ajuda com itens básicos para 1 família.'
+      else if(valor < 50) txt = 'Contribuição significativa: possibilita várias refeições e kits essenciais.'
+      else if(valor < 150) txt = 'Contribuição relevante: compra e distribuição de uma cesta básica.'
+      else txt = 'Grande impacto: apoio contínuo e logística de distribuição.'
+      impactTextEl.textContent = txt
+
+      // update progress demo (just visual)
+      const raised = Number(localStorage.getItem('raised') || 2400)
+      const goal = 20000
+      const newRaised = Math.min(goal, raised + valor)
+      const pct = Math.round((newRaised / goal) * 100)
+      progressBar.style.width = pct + '%'
+      raisedSpan.textContent = newRaised
+    }
+
+    /***********************
+     * CC input masks & visual
+     ***********************/
+    function onlyDigits(s){ return (s || '').replace(/\D/g,'') }
+
+    ccNumber.addEventListener('input', (e)=>{
+      let v = onlyDigits(ccNumber.value)
+      // detect brand
+      const brand = detectCardBrand(v)
+      brandVisual.textContent = brand || ''
+      // format in groups of 4
+      let parts = []
+      for(let i=0;i<v.length;i+=4) parts.push(v.substring(i,i+4))
+      ccNumber.value = parts.join(' ')
+      visualNumber.textContent = ccNumber.value ? ccNumber.value : '•••• •••• •••• ••••'
+    })
+    ccName.addEventListener('input', ()=> {
+      visualName.textContent = ccName.value ? ccName.value.toUpperCase() : 'SEU NOME'
+    })
+    ccExp.addEventListener('input', ()=>{
+      let v = onlyDigits(ccExp.value).slice(0,4)
+      if(v.length>=3) v = v.slice(0,2) + '/' + v.slice(2)
+      ccExp.value = v
+      visualExp.textContent = v || 'MM/AA'
+    })
+
+    function detectCardBrand(digits){
+      if(!digits) return ''
+      if(/^4/.test(digits)) return 'VISA'
+      if(/^5[1-5]/.test(digits)) return 'MASTERCARD'
+      if(/^3[47]/.test(digits)) return 'AMEX'
+      if(/^6/.test(digits)) return 'DISCOVER'
+      return ''
+    }
+
+    /***********************
+     * Validate & simulate payment
+     ***********************/
+    function validateForm(){
+      let ok = true
+      ;[nomeEl, emailEl].forEach(el => el.classList.remove('error'))
+      if(!nomeEl.value.trim()){ nomeEl.classList.add('error'); ok=false }
+      if(!emailEl.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value)){ emailEl.classList.add('error'); ok=false }
+
+      if(getTipo() === 'dinheiro' && getMetodo() === 'cartao'){
+        let num = onlyDigits(ccNumber.value)
+        if(num.length < 13 || !luhnCheck(num)) { ccNumber.classList.add('error'); ok = false } else ccNumber.classList.remove('error')
+        if(!/^\d{2}\/\d{2}$/.test(ccExp.value)) { ccExp.classList.add('error'); ok=false } else ccExp.classList.remove('error')
+        if(ccCvv.value.length < 3) { ccCvv.classList.add('error'); ok=false } else ccCvv.classList.remove('error')
+        if(!ccName.value.trim()){ ccName.classList.add('error'); ok=false } else ccName.classList.remove('error')
+      }
+      return ok
+    }
+
+    function luhnCheck(num){
+      // Luhn algorithm
+      let sum = 0, alt = false
+      for(let i = num.length - 1; i >= 0; i--){
+        let n = parseInt(num.charAt(i),10)
+        if(alt){ n *= 2; if(n>9) n -= 9 }
+        sum += n; alt = !alt
+      }
+      return sum % 10 === 0
+    }
+
+    /***********************
+     * confirm flow
+     ***********************/
+    confirmBtn.addEventListener('click', ()=>{
+      if(!validateForm()){
+        alert('Por favor corrija os campos em destaque.')
+        return
+      }
+      // simulate processing
+      confirmBtn.disabled = true; confirmBtn.textContent = 'Processando...'
+      setTimeout(()=> {
+        // create donation record
+        const tipo = getTipo()
+        const metodo = (tipo === 'dinheiro') ? getMetodo() : 'logistico'
+        const valor = (valorSel.value === 'outro') ? Number(valorOutro.value || 0) : Number(valorSel.value || (tipo !== 'dinheiro'? 0 : 10))
+        const rec = {
+          id: 'rec-' + Date.now(),
+          nome: nomeEl.value.trim(),
+          email: emailEl.value.trim(),
+          telefone: telEl.value.trim(),
+          tipo, metodo, valor,
+          detalhe: detalheNaoDinheiro.value || '',
+          mensagem: mensagemEl.value || '',
+          ts: new Date().toISOString()
+        }
+        saveDonation(rec)
+        // animate confetti
+        triggerConfetti()
+        // show success panel
+        showSuccess(rec)
+        confirmBtn.disabled = false; confirmBtn.textContent = 'Confirmar Doação'
+      }, 1100)
+    })
+
+    limparBtn.addEventListener('click', ()=> {
+      if(!confirm('Deseja limpar todos os campos do formulário?')) return
+      nomeEl.value=''; emailEl.value=''; telEl.value=''; mensagemEl.value=''; detalheNaoDinheiro.value=''
+      valorSel.value='10'; valorOutro.value=''; valorOutro.style.display='none'
+      // reset payment visuals
+      ccNumber.value=''; ccExp.value=''; ccCvv.value=''; ccName.value=''
+      visualNumber.textContent='•••• •••• •••• ••••'; visualName.textContent='SEU NOME'; visualExp.textContent='MM/AA'; brandVisual.textContent=''
+      // reset progress not altering raised
+      updateImpact()
+    })
+
+    /***********************
+     * save / receipt / history
+     ***********************/
+    function saveDonation(rec){
+      const arr = JSON.parse(localStorage.getItem('donations') || '[]')
+      arr.push(rec)
+      localStorage.setItem('donations', JSON.stringify(arr))
+      // update raised (demo)
+      const currentRaised = Number(localStorage.getItem('raised') || 2400)
+      localStorage.setItem('raised', String(currentRaised + (rec.valor || 0)))
+      loadRaised()
+      renderHistory()
+    }
+
+    function loadRaised(){
+      const r = Number(localStorage.getItem('raised') || 2400)
+      raisedSpan.textContent = r
+      const goal = 20000
+      const pct = Math.round((r / goal) * 100)
+      progressBar.style.width = pct + '%'
+    }
+
+    function renderHistory(){
+      const arr = JSON.parse(localStorage.getItem('donations') || '[]').slice(-5).reverse()
+      historyList.innerHTML = ''
+      if(!arr.length) historyList.innerHTML = '<div class="muted-block">Nenhuma doação registrada aqui ainda.</div>'
+      arr.forEach(d=>{
+        const el = document.createElement('div')
+        el.style.padding='8px 6px'; el.style.borderBottom='1px dashed #e6f6f3'
+        el.innerHTML = `<div style="font-weight:700">${escapeHtml(d.nome || 'Anônimo')}</div><div style="font-size:13px;color:#096">${d.valor ? 'R$ '+d.valor : d.tipo}</div><div style="font-size:12px;color:var(--muted)">${new Date(d.ts).toLocaleString()}</div>`
+        historyList.appendChild(el)
+      })
+    }
+
+    function showSuccess(rec){
+      successWrap.style.display = 'block'
+      const html = `
+        <div>Obrigado, <strong>${escapeHtml(rec.nome)}</strong>! Sua doação foi registrada.</div>
+        <div class="receipt"><strong>ID:</strong> ${rec.id} • <strong>Tipo:</strong> ${rec.tipo} • <strong>Método:</strong> ${rec.metodo} • <strong>Valor:</strong> R$ ${rec.valor || 0}</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:8px">Um comprovante foi enviado para ${escapeHtml(rec.email || 'seu e-mail')}. (Simulação)</div>
+      `
+      receiptArea.innerHTML = html
+      // scroll to result
+      successWrap.scrollIntoView({behavior:'smooth'})
+    }
+
+    toHome.addEventListener('click', ()=> {
+      // redirect to homepage (local)
+      window.location.href = 'pagina-inicial.html'
+    })
+
+    downloadReceiptBtn.addEventListener('click', ()=> {
+      // simple text-based "receipt" download
+      const donations = JSON.parse(localStorage.getItem('donations') || '[]')
+      const last = donations[donations.length-1]
+      if(!last){ alert('Nenhuma doação registrada para gerar recibo.'); return }
+      const blob = new Blob([ generateReceiptText(last) ], { type: 'text/plain;charset=utf-8' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url; a.download = `recibo_${last.id}.txt`
+      document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url)
+    })
+
+    function generateReceiptText(rec){
+      return `Recibo de Doação - ConectaDoa\n\nID: ${rec.id}\nNome: ${rec.nome}\nEmail: ${rec.email}\nTelefone: ${rec.telefone}\nTipo: ${rec.tipo}\nMetodo: ${rec.metodo}\nValor: R$ ${rec.valor}\nMensagem: ${rec.mensagem}\nData: ${new Date(rec.ts).toLocaleString()}\n\nObrigado por contribuir!`
+    }
+
+    /***********************
+     * small utilities
+     ***********************/
+    function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])) }
+
+    /***********************
+     * confetti (simple)
+     ***********************/
+    const confettiCanvas = document.getElementById('confettiCanvas')
+    const ctx = confettiCanvas.getContext ? confettiCanvas.getContext('2d') : null
+    let confettiParticles = []
+    function resizeCanvas(){ confettiCanvas.width = window.innerWidth; confettiCanvas.height = window.innerHeight }
+    window.addEventListener('resize', resizeCanvas); resizeCanvas()
+
+    function triggerConfetti(){
+      if(!ctx) return
+      confettiCanvas.style.display = 'block'
+      confettiParticles = []
+      const colors = ['#3fd6ff','#ffd166','#ff6b6b','#6bf2c9','#8e7dff']
+      for(let i=0;i<80;i++){
+        confettiParticles.push({
+          x: Math.random()*confettiCanvas.width,
+          y: -10 - Math.random()*200,
+          vx: (Math.random()-0.5)*4,
+          vy: 2 + Math.random()*4,
+          size: 6 + Math.random()*8,
+          color: colors[Math.floor(Math.random()*colors.length)],
+          rot: Math.random()*360,
+          vr: (Math.random()-0.5)*6
+        })
+      }
+      let ticks = 0
+      const id = setInterval(()=> {
+        ticks++
+        ctx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height)
+        confettiParticles.forEach(p=>{
+          p.x += p.vx; p.y += p.vy; p.vy += 0.08; p.rot += p.vr
+          ctx.save()
+          ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180)
+          ctx.fillStyle = p.color
+          ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size*0.6)
+          ctx.restore()
+        })
+        if(ticks>120){ clearInterval(id); confettiCanvas.style.display='none' }
+      }, 16)
+    }
+
+    /***********************
+     * Chart demo
+     ***********************/
+    function initChart(){
+      const ctx = document.getElementById('impactChart').getContext('2d')
+      const labels = [ 'Set', 'Out', 'Nov' ]
+      const data = [ 4200, 5200, Number(localStorage.getItem('raised') || 2400) ]
+      new Chart(ctx, {
+        type: 'bar',
+        data: { labels, datasets:[{ label:'R$ arrecadado', data, backgroundColor: 'rgba(63,214,255,0.75)', borderColor:'#06323f', borderWidth:1 }]},
+        options: { responsive:true, plugins:{ legend:{display:false} }, scales:{ y:{ beginAtZero:true } } }
+      })
+    }
+
+    /***********************
+     * initial QR mini
+     ***********************/
+    function gerarMiniInit(){
+      gerarMiniQRCode(fullPixPayloadMini())
+    }
+    gerarMiniInit()
+
+    /***********************
+     * init values
+     ***********************/
+    updateImpact()
+    renderHistory()
+
+  </script>
+</body>
+</html>

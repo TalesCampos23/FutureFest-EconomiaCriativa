@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Explorar — ConectaDoa</title>
+    <link href="https://fonts.googleapis.com/css2?family=montserrat:wght@300;400;600;700&family=quicksand:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+      /* base (mesmo visual do index) */
+      *{box-sizing:border-box;margin:0;padding:0}
+      html,body{height:100%}
+      body{font-family:'montserrat',system-ui,Roboto,Arial;color:#0e2b3b;background:#fff}
+      :root{
+        --nav-dark:#164457;--accent:#3fd6ff;--card-bg:#f7fbfd;--shadow:0 10px 18px rgba(17,34,45,0.12)
+      }
+      .navbar{position:fixed;top:0;left:0;right:0;height:72px;background:var(--nav-dark);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:40;box-shadow:0 4px 6px rgba(0,0,0,0.15)}
+      .brand{display:flex;align-items:center;gap:12px}
+      .brand img{width:42px;height:42px;border-radius:50%}
+      main{max-width:1200px;margin:100px auto;padding:24px}
+      .page-title{font-family:'quicksand',sans-serif;font-size:32px;margin-bottom:12px}
+
+      .filters{display:flex;gap:12px;align-items:center;margin-bottom:18px}
+      .filters input, .filters select{padding:10px 12px;border-radius:10px;border:1px solid #e6eef2;flex:1}
+
+      .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+      .card{background:var(--card-bg);padding:14px;border-radius:12px;box-shadow:0 8px 14px rgba(17,34,45,0.06);display:flex;flex-direction:column;gap:10px}
+      .card img{width:100%;height:140px;object-fit:cover;border-radius:8px}
+      .card h3{font-size:18px}
+      .meta{font-size:13px;color:#6b8b95}
+      .actions{margin-top:auto;display:flex;gap:8px;align-items:center}
+      .btn{padding:10px 16px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
+      .btn-primary{background:var(--accent);color:#06323f;box-shadow:var(--shadow)}
+      .small{font-size:13px;padding:8px 10px;border-radius:8px;border:none;background:#122d3b;color:white}
+
+      @media(max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}}
+      @media(max-width:600px){.grid{grid-template-columns:1fr}}
+
+      footer{margin-top:40px}
+
+      /* sidebar estilo pinterest */
+      .sidebar{
+        width:78px;background:#fff;box-shadow:2px 0 8px rgba(0,0,0,0.06);
+        display:flex;flex-direction:column;align-items:center;
+        padding-top:22px;position:fixed;top:72px;left:0;bottom:0;z-index:20;
+      }
+      .sidebar a{
+        display:flex;flex-direction:column;align-items:center;gap:6px;
+        text-decoration:none;color:#0e2b3b;margin-bottom:18px;font-size:11px;
+        width:100%;justify-content:center;padding:8px 0;
+      }
+      .sidebar img.icon{width:28px;height:28px}
+    </style>
+  </head>
+
+  <body>
+    <div class="app">
+
+      <!-- sidebar -->
+      <nav class="sidebar">
+        <a href="pagina-inicial.html"><img class="icon" src="https://img.icons8.com/ios-filled/50/home.png"><span>Início</span></a>
+        <a href="explorar.html"><img class="icon" src="https://img.icons8.com/ios-filled/50/compass--v1.png"><span>Explorar</span></a>
+        <a href="atualizacoes.html"><img class="icon" src="https://img.icons8.com/ios-filled/50/activity-history.png"><span>Atualizações</span></a>
+        <a href="mensagens.html"><img class="icon" src="https://img.icons8.com/ios-filled/50/new-message.png"><span>Mensagens</span></a>
+        <a href="configuracoes.html"><img class="icon" src="https://img.icons8.com/ios-filled/50/settings.png"><span>Configurações</span></a>
+      </nav>
+
+      <nav class="navbar">
+        <div class="brand">
+          <img src="images/logo.png">
+          <div style="font-weight:700">ConectaDoa</div>
+        </div>
+      </nav>
+
+      <main>
+        <div class="page-title">Explorar campanhas e ONGs</div>
+
+        <div class="filters">
+          <input id="filtroTexto" placeholder="buscar por nome, tag ou cidade..." />
+          <select id="filtroRegiao">
+            <option value="">Todas</option>
+            <option value="sp">São Paulo</option>
+            <option value="rj">Rio de Janeiro</option>
+            <option value="mg">Minas Gerais</option>
+            <option value="ba">Bahia</option>
+            <option value="pr">Paraná</option>
+            <option value="rs">Rio Grande do Sul</option>
+            <option value="pe">Pernambuco</option>
+        </select>
+        <button id="limparBtn" class="btn small">Limpar</button>
+        </div>
+
+        <div id="grid" class="grid"></div>
+      </main>
+
+      <footer>
+        <div style="max-width:1200px;margin:0 auto;padding:20px;color:#6b8b95;font-size:13px">
+          © ConectaDoa
+        </div>
+      </footer>
+
+      <script>
+let dados = [
+  {id:1,titulo:'Escola Comunidade Viva',desc:'Reforço escolar e alimentação',tags:['Educação','Infância'],regiao:'SP',img:'https://images.pexels.com/photos/5905494/pexels-photo-5905494.jpeg'},
+  {id:2,titulo:'Saúde Solidária',desc:'Clínica comunitária com atendimentos',tags:['Saúde'],regiao:'RJ',img:'https://images.pexels.com/photos/3992933/pexels-photo-3992933.jpeg'},
+  {id:3,titulo:'Cidade Verde',desc:'Reciclagem e coleta seletiva',tags:['Meio ambiente'],regiao:'MG',img:'https://images.pexels.com/photos/3735214/pexels-photo-3735214.jpeg'},
+  {id:4,titulo:'Casa Arte',desc:'Oficinas de arte e cultura',tags:['Cultura'],regiao:'SP',img:'https://images.pexels.com/photos/3771114/pexels-photo-3771114.jpeg'},
+  {id:5,titulo:'Mães Que Educam',desc:'Apoio a mães e crianças',tags:['Apoio'],regiao:'RJ',img:'https://images.pexels.com/photos/2647937/pexels-photo-2647937.jpeg'},
+  {id:6,titulo:'Banco de Alimentos',desc:'Distribuição de cestas básicas',tags:['Solidariedade'],regiao:'SP',img:'https://images.pexels.com/photos/6646908/pexels-photo-6646908.jpeg'},
+  {id:7,titulo:'Biblioteca Aberta',desc:'Doação de livros e atividades de leitura',tags:['Educação','Cultura'],regiao:'BA',img:'https://images.pexels.com/photos/1370298/pexels-photo-1370298.jpeg'},
+  {id:8,titulo:'Horta comunitária',desc:'Capacitação em agricultura urbana',tags:['Meio ambiente','Sustentabilidade'],regiao:'PR',img:'https://images.pexels.com/photos/4503262/pexels-photo-4503262.jpeg'},
+  {id:9,titulo:'Apoio psicossocial',desc:'Atendimento psicológico gratuito',tags:['Saúde','Bem-estar'],regiao:'RS',img:'https://images.pexels.com/photos/5699456/pexels-photo-5699456.jpeg'},
+  {id:10,titulo:'Oficina profissional',desc:'Curso técnico e geração de renda',tags:['Trabalho','Educação'],regiao:'PE',img:'https://images.pexels.com/photos/3184306/pexels-photo-3184306.jpeg'}
+]
+
+
+        let grid = document.getElementById('grid')
+
+        function renderizar(lista){
+          grid.innerHTML = ''
+          lista.forEach(item=>{
+            let div = document.createElement('div')
+            div.className='card'
+            div.innerHTML = `
+              <img src="${item.img}">
+              <h3>${item.titulo}</h3>
+              <div class="meta">${item.desc}</div>
+              <div class="meta">tags: ${item.tags.join(', ')} • região: ${item.regiao.toUpperCase()}</div>
+
+              <div class="actions">
+                <button class="btn btn-primary" onclick="verCampanha(${item.id})">Ver campanha</button>
+                <button class="small" onclick="doarAgora(${item.id})">Doar agora</button>
+              </div>
+            `
+            grid.appendChild(div)
+          })
+        }
+
+        function verCampanha(id){
+          window.location.href = `campanha.html?campanha=${id}`
+        }
+
+        function doarAgora(id){
+          window.location.href = `formulario-doacao.html?campanha=${id}`
+        }
+
+
+
+        renderizar(dados)
+
+        let filtroRegiao = document.getElementById('filtroRegiao')
+        let filtroTexto = document.getElementById('filtroTexto')
+        let limparBtn = document.getElementById('limparBtn')
+
+        filtroRegiao.addEventListener('change', filtrar)
+        filtroTexto.addEventListener('input', filtrar)
+        limparBtn.addEventListener('click', ()=> {
+        filtroRegiao.value = ''
+        filtroTexto.value = ''
+        renderizar(dados)
+})
+
+function filtrar(){
+  let regiao = filtroRegiao.value.toLowerCase()
+  let texto = filtroTexto.value.toLowerCase()
+
+  let lista = dados.filter(item => {
+    let matchRegiao = regiao === '' || item.regiao.toLowerCase() === regiao
+    let matchTexto =
+      item.titulo.toLowerCase().includes(texto) ||
+      item.desc.toLowerCase().includes(texto) ||
+      item.tags.join(' ').toLowerCase().includes(texto)
+
+    return matchRegiao && matchTexto
+  })
+
+  renderizar(lista)
+}
+      </script>
+    </body>
+</html>

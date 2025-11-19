@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campanha • ConectaDoa</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+  <style>
+    body {
+      background-color: #f5f7fa;
+      font-family: "Inter", sans-serif;
+    }
+    .box {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin-top: 40px;
+    }
+    #imagemCampanha {
+      width: 100%;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
+    .back-btn {
+      text-decoration: none;
+      font-weight: 500;
+      color: #0d6efd;
+      margin-bottom: 15px;
+      display: inline-block;
+    }
+    .info-card {
+      padding: 15px;
+      background: #eef3ff;
+      border-radius: 14px;
+      margin-bottom: 10px;
+    }
+    li { margin-bottom: 6px; }
+  </style>
+</head>
+
+<body>
+
+  <div class="container col-12 col-md-8 col-lg-6">
+    <div class="box">
+
+      <a href="pagina-inicial.html" class="back-btn">← Voltar</a>
+
+      <h2 id="tituloCampanha"></h2>
+      <p class="text-muted" id="categoriaCampanha"></p>
+
+      <img id="imagemCampanha" src="" alt="Imagem da campanha">
+
+      <h4>Descrição geral</h4>
+      <p id="descricaoCampanha"></p>
+
+      <h4>Objetivo</h4>
+      <p id="objetivoCampanha"></p>
+
+      <h4>Ações realizadas</h4>
+      <ul id="acoesCampanha"></ul>
+
+      <h4>Impacto social</h4>
+      <ul id="impactoCampanha"></ul>
+
+      <h4>Meta de arrecadação</h4>
+      <div id="metaCampanha" class="info-card"></div>
+
+      <h4>Como o dinheiro será usado</h4>
+      <ul id="usoCampanha"></ul>
+
+      <h4>Local de atuação</h4>
+      <div id="localCampanha" class="info-card"></div>
+
+      <h4>Parceiros</h4>
+      <ul id="parceirosCampanha"></ul>
+
+      <h4>Atualizações</h4>
+      <ul id="atualizacoesCampanha"></ul>
+
+      <h4>Contatos</h4>
+      <ul id="contatosCampanha"></ul>
+
+      <h4>Informações técnicas</h4>
+      <ul id="infoCampanha"></ul>
+
+    </div>
+  </div>
+
+
+<script>
+let posts = [
+{
+id:1,
+titulo:"Escola Comunidade Viva",
+categoria:"necessitada",
+descricao:"Reforço escolar, alimentação e atividades culturais para crianças em risco social.",
+objetivo:"Aumentar o desempenho escolar e garantir segurança alimentar.",
+imagem:"https://images.pexels.com/photos/5905494/pexels-photo-5905494.jpeg",
+acoes:[
+"Reforço escolar diário",
+"Alimentação saudável",
+"Atividades culturais e esportivas"
+],
+impacto:[
+"320 crianças atendidas",
+"Aumento de 80% no rendimento escolar",
+"Redução de evasão escolar"
+],
+meta:"R$ 85.000 para manter 6 meses de atividades",
+uso:[
+"Material escolar",
+"Alimentos",
+"Salário de educadores"
+],
+local:"Bela Vista – São Paulo, SP",
+parceiros:["Fundo Social", "ONG Jovens do Futuro", "Escolas Públicas SP"],
+atualizacoes:[
+"10/03 – Nova sala de leitura entregue",
+"02/03 – Chegada de voluntários"
+],
+contatos:[
+"(11) 99822-1106",
+"contato@comunidadeviva.org"
+]
+},
+
+{
+id:2,
+titulo:"Saúde Solidária",
+categoria:"destaque",
+descricao:"Clínica comunitária com vacinação, consultas e exames gratuitos.",
+objetivo:"Levar atendimento e prevenção para comunidades vulneráveis.",
+imagem:"https://images.pexels.com/photos/3992933/pexels-photo-3992933.jpeg",
+acoes:[
+"Campanhas de vacinação",
+"Consultas gratuitas",
+"Exames e encaminhamento médico"
+],
+impacto:[
+"Mais de 5.000 atendimentos anuais",
+"Aumento da vacinação em 60%",
+"Redução de doenças respiratórias"
+],
+meta:"R$ 120.000 para compra de equipamentos",
+uso:[
+"Novos equipamentos médicos",
+"Ampliação da ala pediátrica",
+"Remédios e insumos"
+],
+local:"Grajaú – São Paulo, SP",
+parceiros:["Hospital Popular", "Médicos Voluntários SP"],
+atualizacoes:[
+"04/03 – Novo ultrassom adquirido",
+"18/02 – Mutirão de vacinação"
+],
+contatos:["(11) 97244-2210", "saudesolidaria@ong.com"]
+},
+
+{
+id:3,
+titulo:"Cidade Verde",
+categoria:"destaque",
+descricao:"Projeto de sustentabilidade e educação ambiental nas comunidades.",
+objetivo:"Ensinar reciclagem e conscientização ambiental.",
+imagem:"https://images.pexels.com/photos/3735214/pexels-photo-3735214.jpeg",
+acoes:["Oficinas de reciclagem","Aulas de conscientização","Mutirões de limpeza"],
+impacto:[
+"800 famílias impactadas",
+"Coleta seletiva implantada em 3 bairros",
+"Redução de lixo em 35%"
+],
+meta:"R$ 40.000",
+uso:["Equipamentos de reciclagem","Materiais educativos"],
+local:"Zona Leste – SP",
+parceiros:["VerdeMais","ReciclaSP"],
+atualizacoes:["03/03 – Nova estação de coleta inaugurada"],
+contatos:["(11) 99331-0099"]
+},
+
+{
+id:4,
+titulo:"Casa Arte",
+categoria:"necessitada",
+descricao:"Aulas de arte, dança e criatividade para jovens vulneráveis.",
+objetivo:"Desenvolver talento e gerar oportunidades culturais.",
+imagem:"https://images.pexels.com/photos/3771114/pexels-photo-3771114.jpeg",
+acoes:["Aulas de pintura","Teatro","Música e dança"],
+impacto:[
+"40 jovens formados por ano",
+"Participação em eventos culturais"
+],
+meta:"R$ 32.000",
+uso:["Materiais de arte","Reforma do estúdio"],
+local:"Mooca – SP",
+parceiros:["Instituto Cultural SP"],
+atualizacoes:["06/03 – Apresentação teatral realizada"],
+contatos:["(11) 95522-8881"]
+},
+
+{
+id:5,
+titulo:"Refúgio Esperança",
+categoria:"necessitada",
+descricao:"Acolhimento de pessoas em situação de rua.",
+objetivo:"Oferecer abrigo, alimentação e cuidados básicos.",
+imagem:"https://images.pexels.com/photos/2647937/pexels-photo-2647937.jpeg",
+acoes:["Acolhimento noturno","Banho quente","Roupas e alimentação"],
+impacto:["200 pessoas atendidas por mês","Reinserção social de 15% dos acolhidos"],
+meta:"R$ 95.000",
+uso:["Camas","Alimentos","Produtos de higiene"],
+local:"Centro – SP",
+parceiros:["Pastoral da Rua","AmeSP"],
+atualizacoes:["05/03 – Recebimento de 80 cobertores"],
+contatos:["(11) 91344-5550"]
+},
+
+{
+id:6,
+titulo:"Banco de Alimentos Cidade",
+categoria:"destaque",
+descricao:"Distribuição de alimentos para famílias carentes.",
+objetivo:"Combater a fome com doações semanais.",
+imagem:"https://images.pexels.com/photos/6646908/pexels-photo-6646908.jpeg",
+acoes:["Coleta de alimentos","Cestas básicas mensais"],
+impacto:["400 famílias atendidas","Parceria com 12 mercados"],
+meta:"R$ 60.000",
+uso:["Transporte","Cestas básicas"],
+local:"Heliópolis – SP",
+parceiros:["Mercados Solidários SP"],
+atualizacoes:["08/03 – Nova parceria com mercado local"],
+contatos:["(11) 98211-0007"]
+},
+
+{
+id:7,
+titulo:"Biblioteca Aberta",
+categoria:"necessitada",
+descricao:"Livros grátis, aulas de leitura e apoio escolar.",
+objetivo:"Estimular leitura e acesso ao conhecimento.",
+imagem:"https://images.pexels.com/photos/1370298/pexels-photo-1370298.jpeg",
+acoes:["Doação de livros","Aulas de leitura"],
+impacto:["2.000 livros doados","150 crianças atendidas"],
+meta:"R$ 18.000",
+uso:["Livros novos","Reforma do espaço"],
+local:"Pinheiros – SP",
+parceiros:["Editora Educação"],
+atualizacoes:["07/03 – 120 novos livros chegaram"],
+contatos:["(11) 92110-0292"]
+},
+
+{
+id:8,
+titulo:"Horta Comunitária",
+categoria:"destaque",
+descricao:"Projeto de agricultura urbana.",
+objetivo:"Ensinar cultivo e garantir alimentação saudável.",
+imagem:"https://images.pexels.com/photos/4503262/pexels-photo-4503262.jpeg",
+acoes:["Oficinas de plantio","Horta sustentável"],
+impacto:["50 famílias colhendo semanalmente"],
+meta:"R$ 22.000",
+uso:["Ferramentas agrícolas","Sementes"],
+local:"Itaquera – SP",
+parceiros:["VerdeVivo"],
+atualizacoes:["01/03 – Colheita recorde realizada"],
+contatos:["(11) 95531-9090"]
+},
+
+{
+id:9,
+titulo:"Apoio Psicossocial",
+categoria:"necessitada",
+descricao:"Atendimento psicológico gratuito.",
+objetivo:"Melhorar saúde mental de pessoas vulneráveis.",
+imagem:"https://images.pexels.com/photos/5699456/pexels-photo-5699456.jpeg",
+acoes:["Sessões semanais","Apoio familiar"],
+impacto:["300 atendidos por mês"],
+meta:"R$ 50.000",
+uso:["Profissionais","Materiais terapêuticos"],
+local:"SP – Zona Norte",
+parceiros:["Psicólogos Solidários"],
+atualizacoes:["03/03 – Novo grupo terapêutico criado"],
+contatos:["(11) 90331-7766"]
+},
+
+{
+id:10,
+titulo:"Oficina Profissional",
+categoria:"destaque",
+descricao:"Cursos técnicos para jovens.",
+objetivo:"Criar oportunidades de emprego.",
+imagem:"https://images.pexels.com/photos/3184306/pexels-photo-3184306.jpeg",
+acoes:["Aulas técnicas","Certificações"],
+impacto:["120 jovens empregados"],
+meta:"R$ 70.000",
+uso:["Instrutores","Equipamentos"],
+local:"Santo André – SP",
+parceiros:["SENAI","FuturoTec"],
+atualizacoes:["04/03 – Nova turma de TI iniciou"],
+contatos:["(11) 99922-8801"]
+}
+];
+
+
+// PUXA O ID DA URL
+const params = new URLSearchParams(window.location.search);
+const id = params.get("campanha");
+
+// ACHA CAMPANHA
+const campanha = posts.find(p => p.id == id);
+
+if (campanha) {
+
+document.getElementById("tituloCampanha").innerText = campanha.titulo;
+document.getElementById("categoriaCampanha").innerText = "Categoria: " + campanha.categoria.toUpperCase();
+document.getElementById("imagemCampanha").src = campanha.imagem;
+document.getElementById("descricaoCampanha").innerText = campanha.descricao;
+document.getElementById("objetivoCampanha").innerText = campanha.objetivo;
+
+document.getElementById("acoesCampanha").innerHTML =
+  campanha.acoes.map(a => `<li>${a}</li>`).join("");
+
+document.getElementById("impactoCampanha").innerHTML =
+  campanha.impacto.map(i => `<li>${i}</li>`).join("");
+
+document.getElementById("metaCampanha").innerText = campanha.meta;
+
+document.getElementById("usoCampanha").innerHTML =
+  campanha.uso.map(u => `<li>${u}</li>`).join("");
+
+document.getElementById("localCampanha").innerText = campanha.local;
+
+document.getElementById("parceirosCampanha").innerHTML =
+  campanha.parceiros.map(p => `<li>${p}</li>`).join("");
+
+document.getElementById("atualizacoesCampanha").innerHTML =
+  campanha.atualizacoes.map(a => `<li>${a}</li>`).join("");
+
+document.getElementById("contatosCampanha").innerHTML =
+  campanha.contatos.map(c => `<li>${c}</li>`).join("");
+
+document.getElementById("infoCampanha").innerHTML = `
+<li>ID: ${campanha.id}</li>
+<li>Categoria: ${campanha.categoria}</li>
+<li>Imagem usada: ${campanha.imagem}</li>
+`;
+}
+</script>
+
+</body>
+</html>

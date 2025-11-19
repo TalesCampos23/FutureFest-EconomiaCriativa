@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ConectaDoa — Página inicial</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    /* reset simples */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{font-family:'Montserrat',system-ui,Arial; background:#ffffff;color:#0e2b3b}
+
+    /* layout */
+    .app {
+      display:flex;
+      min-height:100vh;
+    }
+
+    /* sidebar estilo pinterest */
+    .sidebar{
+      width:78px;
+      background:#fff;
+      box-shadow:2px 0 8px rgba(0,0,0,0.06);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding-top:22px;
+      position:fixed;
+      top:0;
+      left:0;
+      bottom:0;
+      z-index:20;
+    }
+    .sidebar a{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:6px;
+      text-decoration:none;
+      color:#0e2b3b;
+      margin-bottom:18px;
+      font-size:11px;
+      width:100%;
+      justify-content:center;
+      padding:8px 0;
+    }
+    .sidebar a:hover{opacity:0.8}
+    .sidebar img.icon{width:28px;height:28px;object-fit:contain;display:block}
+
+    /* main */
+    .main-wrap{
+      margin-left:78px;
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      min-height:100vh;
+    }
+
+    /* header */
+    header{
+      height:72px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 28px;
+      border-bottom:1px solid #eef6f9;
+      position:sticky;
+      top:0;
+      background:#fff;
+      z-index:10;
+    }
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand img{width:42px;height:42px;border-radius:8px}
+    .search {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      background:#fcfcfc;
+      border-radius:20px;
+      padding:8px 14px;
+      box-shadow:5px 4px 6px rgba(0,0,0,0.04);
+      max-width:420px;
+      width:50%;
+    }
+    .search input{border:none;background:transparent;outline:none;font-size:16px;width:100%}
+    .header-actions{display:flex;gap:12px;align-items:center}
+
+    /* content top (hero + tabs) */
+    .hero{
+      display:flex;
+      align-items:center;
+      gap:20px;
+      padding:28px;
+    }
+    .hero .logo{width:108px;height:108px;border-radius:12px;object-fit:cover}
+    .hero h1{font-family:'Quicksand',sans-serif;font-size:36px;color:#0c4055}
+
+    .tabs{display:flex;gap:10px;padding:0 28px 18px}
+    .tab{
+      background:#fff;border-radius:24px;padding:12px 18px;border:1px solid #eef3f4;cursor:pointer;font-weight:600;
+    }
+    .tab.active{background:#33332e;color:#fff;border-color:#33332e}
+
+    /* grid de cards */
+    .grid{
+      padding:18px 28px;
+      display:grid;
+      grid-template-columns: repeat(auto-fill,minmax(280px,1fr));
+      gap:18px;
+      align-items:start;
+    }
+
+    .card{
+      background:#fff;border-radius:12px;box-shadow:0 8px 18px rgba(17,34,45,0.06);overflow:hidden;display:flex;flex-direction:column;
+    }
+    .card .media{height:190px;overflow:hidden}
+    .card .media img{width:100%;height:100%;object-fit:cover;display:block}
+    .card .body{padding:14px;flex:1;display:flex;flex-direction:column}
+    .categoria{font-size:12px;color:#117a7f;font-weight:700;margin-bottom:8px;text-transform:uppercase}
+    .titulo{font-size:16px;font-weight:700;margin-bottom:8px}
+    .descricao{font-size:14px;color:#556b72;margin-bottom:8px;flex:1}
+    .linkpost{font-size:13px;color:#1572a1;text-decoration:none;margin-bottom:8px}
+    .card .rodape{display:flex;justify-content:space-between;padding:12px 14px;border-top:1px solid #eef3f4}
+
+    .btn-editar,.btn-excluir{padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-weight:700;font-size:13px}
+    .btn-editar{background:#e8f6f3;color:#117a65}
+    .btn-excluir{background:#fdeaea;color:#a83232}
+
+    /* responsivo */
+    @media(max-width:980px){
+      .search{width:60%}
+      .hero{flex-direction:column;align-items:flex-start;padding:18px}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- sidebar -->
+    <nav class="sidebar" aria-label="menu principal">
+      <a href="pagina-inicial.html" aria-current="page">
+        <img class="icon" src="https://img.icons8.com/ios-filled/50/000000/home.png" alt="home">
+        <span>Início</span>
+      </a>
+      <a href="explorar.html">
+        <img class="icon" src="https://img.icons8.com/ios-filled/50/000000/compass--v1.png" alt="explorar">
+        <span>Explorar</span>
+      </a>
+      <a href="atualizacoes.html">
+        <img class="icon" src="https://img.icons8.com/ios-filled/50/000000/activity-history.png" alt="atualizações">
+        <span>Atualizações</span>
+      </a>
+      <a href="mensagens.html">
+        <img class="icon" src="https://img.icons8.com/ios-filled/50/000000/new-message.png" alt="mensagens">
+        <span>Mensagens</span>
+      </a>
+      <a href="configuracoes.html">
+        <img class="icon" src="https://img.icons8.com/ios-filled/50/000000/settings.png" alt="configurações">
+        <span>Configurações</span>
+      </a>
+    </nav>
+
+    <!-- main -->
+    <div class="main-wrap">
+      <header>
+        <div class="brand">
+          <img src="images/logo.png" alt="logo ConectaDoa" onerror="this.src='https://picsum.photos/seed/logo/200/200'">
+          <div style="font-weight:700">ConectaDoa</div>
+        </div>
+
+        <div class="search" role="search" aria-label="Pesquisar instituições">
+          <img src="https://img.icons8.com/ios/24/000000/search--v1.png" alt="" style="width:18px;height:18px;opacity:.6">
+          <input id="search" type="search" placeholder="Pesquisar por nome, tag ou cidade" aria-label="Pesquisar">
+        </div>
+      </header>
+
+      <section class="hero" aria-labelledby="titulo-hero">
+        <h1 id="titulo-hero">Instituições em destaque</h1>
+      </section>
+
+      <div class="tabs" role="tablist" aria-label="filtros">
+        <div id="tab-necessitadas" class="tab" role="tab" tabindex="0" onclick="filtrar('necessitada')">Necessitadas</div>
+        <div id="tab-destaque" class="tab active" role="tab" tabindex="0" onclick="filtrar('destaque')">Destaque</div>
+        <div id="tab-todas" class="tab" role="tab" tabindex="0" onclick="filtrar('todas')">Todas</div>
+      </div>
+
+      <main class="grid" id="grid">
+        <!-- cards serão gerados por javascript -->
+      </main>
+    </div>
+  </div>
+
+    <script>
+   let posts = [
+  {
+    id:1,
+    titulo:'Escola comunidade viva',
+    categoria:'necessitada',
+    descricao:'Reforço escolar e alimentação para crianças',
+    imagem:'https://images.pexels.com/photos/5905494/pexels-photo-5905494.jpeg'
+  },
+  {
+    id:2,
+    titulo:'Saúde solidária',
+    categoria:'destaque',
+    descricao:'Clínica comunitária com campanhas de vacinação',
+    imagem:'https://images.pexels.com/photos/3992933/pexels-photo-3992933.jpeg'
+  },
+  {
+    id:3,
+    titulo:'Cidade verde',
+    categoria:'destaque',
+    descricao:'Coleta seletiva e educação ambiental',
+    imagem:'https://images.pexels.com/photos/3735214/pexels-photo-3735214.jpeg'
+  },
+  {
+    id:4,
+    titulo:'Casa arte',
+    categoria:'necessitada',
+    descricao:'Oficinas de arte para jovens em vulnerabilidade',
+    imagem:'https://images.pexels.com/photos/3771114/pexels-photo-3771114.jpeg'
+  },
+  {
+    id:5,
+    titulo:'Refugio esperança',
+    categoria:'necessitada',
+    descricao:'Acolhimento para pessoas em situação de rua',
+    imagem:'https://images.pexels.com/photos/2647937/pexels-photo-2647937.jpeg'
+  },
+  {
+    id:6,
+    titulo:'Banco de alimentos cidade',
+    categoria:'destaque',
+    descricao:'Distribuição mensal para famílias',
+    imagem:'https://images.pexels.com/photos/6646908/pexels-photo-6646908.jpeg'
+  },
+  {
+    id:7,
+    titulo:'Biblioteca aberta',
+    categoria:'necessitada',
+    descricao:'Doação de livros e atividades de leitura',
+    imagem:'https://images.pexels.com/photos/1370298/pexels-photo-1370298.jpeg'
+  },
+  {
+    id:8,
+    titulo:'Horta comunitária',
+    categoria:'destaque',
+    descricao:'Capacitação em agricultura urbana',
+    imagem:'https://images.pexels.com/photos/4503262/pexels-photo-4503262.jpeg'
+  },
+  {
+    id:9,
+    titulo:'Apoio psicossocial',
+    categoria:'necessitada',
+    descricao:'Atendimento psicológico gratuito',
+    imagem:'https://images.pexels.com/photos/5699456/pexels-photo-5699456.jpeg'
+  },
+  {
+    id:10,
+    titulo:'Oficina profissional',
+    categoria:'destaque',
+    descricao:'Curso técnico e geração de renda',
+    imagem:'https://images.pexels.com/photos/3184306/pexels-photo-3184306.jpeg'
+  }
+];
+
+   /* renderiza todos os posts atuais no grid */
+function renderizar(lista){
+  let grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  for(let i=0;i<lista.length;i++){
+    let p = lista[i];
+    let card = document.createElement('article');
+    card.className = 'card';
+    card.setAttribute('data-id', p.id);
+
+    // AQUI está a única mudança: o card agora tem um <a> clicável ao redor
+    card.innerHTML = ''
+      + '<a href="campanha.html?campanha='+p.id+'" class="card-link">'
+        + '<div class="media"><img src="'+p.imagem+'" alt="'+escapeHtml(p.titulo)+'"></div>'
+        + '<div class="body">'
+          + '<div class="categoria">'+escapeHtml(p.categoria)+'</div>'
+          + '<div class="titulo">'+escapeHtml(p.titulo)+'</div>'
+          + '<div class="descricao">'+escapeHtml(p.descricao)+'</div>'
+        + '</div>'
+      + '</a>';
+
+    grid.appendChild(card);
+  }
+}
+
+/* escape simples para textos */
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; });
+}
+
+/* filtra por categoria: 'destaque' | 'necessitada' | 'todas' */
+function filtrar(tipo){
+  // tabs UI
+  let tabs = document.querySelectorAll('.tab');
+  for(let i=0;i<tabs.length;i++) tabs[i].classList.remove('active');
+  if(tipo === 'destaque') document.getElementById('tab-destaque').classList.add('active');
+  else if(tipo === 'necessitada') document.getElementById('tab-necessitadas').classList.add('active');
+  else document.getElementById('tab-todas').classList.add('active');
+
+  if(tipo === 'todas') renderizar(posts);
+  else{
+    let sub = posts.filter(function(x){ return x.categoria.toLowerCase() === tipo.toLowerCase(); });
+    renderizar(sub);
+  }
+}
+
+/* pesquisa simples por título, descrição ou categoria */
+document.getElementById('search').addEventListener('input', function(evt){
+  let q = evt.target.value.trim().toLowerCase();
+  if(q === '') return filtrar('destaque'); // padrão
+  let resultado = posts.filter(function(x){
+    return x.titulo.toLowerCase().indexOf(q) !== -1 ||
+           x.descricao.toLowerCase().indexOf(q) !== -1 ||
+           x.categoria.toLowerCase().indexOf(q) !== -1;
+  });
+  renderizar(resultado);
+});
+
+/* inicializa com 'destaque' ativo */
+window.addEventListener('load', function(){
+  filtrar('destaque');
+});
+
+  </script>
+</body>
+</html>
